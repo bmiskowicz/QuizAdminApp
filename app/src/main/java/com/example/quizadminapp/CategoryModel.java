@@ -6,11 +6,10 @@ public class CategoryModel {
     private String noOfSets;
     private String setCounter;
 
-    public CategoryModel(String id, String name, String noOfSets, String setCounter) {
+    public CategoryModel(String id, String name, String noOfSets) {
         this.id = id;
         this.name = name;
         this.noOfSets = noOfSets;
-        this.setCounter = setCounter;
     }
 
     public String getSetCounter() {
