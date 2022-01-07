@@ -71,7 +71,7 @@ public class CategoryActivity extends AppCompatActivity {
 
                         for(int i=1; i <= count; i++)
                         {
-                            String catName = doc.getString("CAT" + String.valueOf(i) + "_NAME");
+                            String catName = doc.getString("CAT" + String.valueOf(i));
 
                             catList.add(catName);
                         }
