@@ -29,6 +29,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.HashMap;
 import java.util.List;
@@ -161,14 +164,34 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 else
                 {
                     deleteId = catList.get(i).getId();
+                    String finalDeleteId = deleteId;
                     firestore.collection("Quiz").document(deleteId)
-                            .delete();
+                            .collection(String.valueOf(id)).get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    WriteBatch batch = firestore.batch();
+                                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                                        batch.delete(doc.getReference());
+                                    }
+
+                                    batch.commit();
+                                    firestore.collection("Quiz").document(finalDeleteId)
+                                            .delete();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    loadingDialog.dismiss();
+                                }
+                            });
                 }
             }
 
 
             categoryDocument.put("COUNT", index-1);
-
             firestore.collection("Quiz").document("Categories")
                     .set(categoryDocument)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
