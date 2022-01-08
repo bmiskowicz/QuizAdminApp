@@ -29,6 +29,8 @@ public class CategoryActivity extends AppCompatActivity {
     private RecyclerView cat_recycler_view;
     private Button addCatButton;
     public static List<CategoryModel> catList = new ArrayList<>();
+    public static int selectedCatId = 0;
+
     private FirebaseFirestore firestore;
     private Dialog loadingDialog, addCategoryDialog;
     private EditText dialogCatName;
@@ -111,7 +113,7 @@ public class CategoryActivity extends AppCompatActivity {
                             String catName = doc.getString("CAT" + String.valueOf(i) + "_NAME");
                             String catid = doc.getString("CAT" + String.valueOf(i) + "_ID");
 
-                            catList.add(new CategoryModel(catid, catName, "0"));
+                            catList.add(new CategoryModel(catid, catName, "0", "1"));
                         }
 
                         adapter = new CategoryAdapter(catList);
@@ -143,6 +145,7 @@ public class CategoryActivity extends AppCompatActivity {
         Map<String, Object> categoryData = new ArrayMap<>();
         categoryData.put("NAME", title);
         categoryData.put("SETS", 0);
+        categoryData.put("COUNTER", "1");
 
         String doc_id =  firestore.collection("Quiz").document().getId();
         firestore.collection("Quiz").document(doc_id)
@@ -163,7 +166,7 @@ public class CategoryActivity extends AppCompatActivity {
                                     public void onSuccess(Void unused) {
                                         Toast.makeText(CategoryActivity.this, "Category added successfully", Toast.LENGTH_SHORT).show();
 
-                                        catList.add(new CategoryModel(doc_id, title, "0"));
+                                        catList.add(new CategoryModel(doc_id, title, "0", "1"));
 
                                         adapter.notifyItemInserted(catList.size());
 
