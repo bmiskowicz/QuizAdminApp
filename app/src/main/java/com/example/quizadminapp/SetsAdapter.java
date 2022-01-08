@@ -2,6 +2,7 @@ package com.example.quizadminapp;
 
 import static com.example.quizadminapp.CategoryActivity.catList;
 import static com.example.quizadminapp.CategoryActivity.selectedCatId;
+import static com.example.quizadminapp.SetsActivity.selected_set_index;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -80,6 +81,7 @@ public class SetsAdapter extends RecyclerView.Adapter<SetsAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    selected_set_index = pos;
                     Intent intent = new Intent(itemView.getContext(), QuestionActivity.class);
                     itemView.getContext().startActivity(intent);
                 }

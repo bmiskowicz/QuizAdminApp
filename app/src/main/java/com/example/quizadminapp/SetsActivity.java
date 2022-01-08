@@ -37,6 +37,7 @@ public class SetsActivity extends AppCompatActivity {
 
 
     public static List<String> setIDs = new ArrayList<>();
+    public static int selected_set_index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
