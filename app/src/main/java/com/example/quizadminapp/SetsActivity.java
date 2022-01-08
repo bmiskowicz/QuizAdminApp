@@ -1,7 +1,7 @@
 package com.example.quizadminapp;
 
 import static com.example.quizadminapp.CategoryActivity.catList;
-import static com.example.quizadminapp.CategoryActivity.selectedCatId;
+import static com.example.quizadminapp.CategoryActivity.selected_cat_index;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -80,7 +79,7 @@ public class SetsActivity extends AppCompatActivity {
 
         loadingDialog.show();
 
-        firestore.collection("Quiz").document(catList.get(selectedCatId).getId())
+        firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -89,8 +88,8 @@ public class SetsActivity extends AppCompatActivity {
                             setIDs.add(documentSnapshot.getString("SET" + String.valueOf(i) + "_ID"));
                         }
 
-                        catList.get(selectedCatId).setSetCounter(documentSnapshot.getString("COUNTER"));
-                        catList.get(selectedCatId).setNoOfSets(String.valueOf(noOfSets));
+                        catList.get(selected_cat_index).setSetCounter(documentSnapshot.getString("COUNTER"));
+                        catList.get(selected_cat_index).setNoOfSets(String.valueOf(noOfSets));
 
                         adapter = new SetsAdapter(setIDs);
                         setsView.setAdapter(adapter);
@@ -113,13 +112,13 @@ public class SetsActivity extends AppCompatActivity {
     private void addNewSet() {
         loadingDialog.show();
 
-        String currentCatID = catList.get(selectedCatId).getId();
-        String currentCounter = catList.get(selectedCatId).getSetCounter();
+        String currentCatID = catList.get(selected_cat_index).getId();
+        String currentCounter = catList.get(selected_cat_index).getSetCounter();
 
         Map<String, Object> questionsData = new ArrayMap<>();
         questionsData.put("COUNT", "0");
 
-        firestore.collection("Quiz").document(catList.get(selectedCatId).getId())
+        firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
                 .collection(currentCounter).document("QUESTIONS")
                 .set(questionsData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -135,10 +134,10 @@ public class SetsActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-                                        Toast.makeText(SetsActivity.this,"Set added successfully", Toast.LENGTH_SHORT);
+                                        Toast.makeText(SetsActivity.this,"Set added successfully", Toast.LENGTH_SHORT).show();;
                                         setIDs.add(currentCounter);
-                                        catList.get(selectedCatId).setNoOfSets(String.valueOf(setIDs.size()));
-                                        catList.get(selectedCatId).setSetCounter(String.valueOf(Integer.valueOf(currentCounter) + 1));
+                                        catList.get(selected_cat_index).setNoOfSets(String.valueOf(setIDs.size()));
+                                        catList.get(selected_cat_index).setSetCounter(String.valueOf(Integer.valueOf(currentCounter) + 1));
 
                                         adapter.notifyItemInserted(setIDs.size());
                                         loadingDialog.dismiss();

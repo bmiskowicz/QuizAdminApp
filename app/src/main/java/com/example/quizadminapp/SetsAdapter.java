@@ -1,7 +1,7 @@
 package com.example.quizadminapp;
 
 import static com.example.quizadminapp.CategoryActivity.catList;
-import static com.example.quizadminapp.CategoryActivity.selectedCatId;
+import static com.example.quizadminapp.CategoryActivity.selected_cat_index;
 import static com.example.quizadminapp.SetsActivity.selected_set_index;
 
 import android.app.AlertDialog;
@@ -109,7 +109,7 @@ public class SetsAdapter extends RecyclerView.Adapter<SetsAdapter.ViewHolder> {
         private void deleteSet(int pos, String setID, Context context, SetsAdapter adapter) {
             loadingDialog.show();
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            firestore.collection("Quiz").document(catList.get(selectedCatId).getId())
+            firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
                     .collection(setID).get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -135,14 +135,14 @@ public class SetsAdapter extends RecyclerView.Adapter<SetsAdapter.ViewHolder> {
                                     String ref = "SET" + String.valueOf(index) + "_ID";
                                     catDoc.put("SET" + String.valueOf(index) + "_ID", FieldValue.delete());
 
-                                    firestore.collection("Quiz").document(catList.get(selectedCatId).getId())
+                                    firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
                                             .update(catDoc)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(context, "Set deleted successfully", Toast.LENGTH_SHORT);
+                                                    Toast.makeText(context, "Set deleted successfully", Toast.LENGTH_SHORT).show();;
                                                     SetsActivity.setIDs.remove(pos);
-                                                    catList.get(selectedCatId).setNoOfSets(String.valueOf(SetsActivity.setIDs.size()));
+                                                    catList.get(selected_cat_index).setNoOfSets(String.valueOf(SetsActivity.setIDs.size()));
                                                     adapter.notifyDataSetChanged();
                                                     loadingDialog.dismiss();
                                                 }

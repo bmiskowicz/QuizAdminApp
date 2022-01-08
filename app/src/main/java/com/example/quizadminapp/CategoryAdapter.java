@@ -1,8 +1,5 @@
 package com.example.quizadminapp;
 
-import static com.example.quizadminapp.CategoryActivity.catList;
-import static com.example.quizadminapp.CategoryActivity.selectedCatId;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -21,19 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +88,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CategoryActivity.selectedCatId = pos;
+                    CategoryActivity.selected_cat_index = pos;
                     Intent intent = new Intent(itemView.getContext(), SetsActivity.class);
                     itemView.getContext().startActivity(intent);
                 }

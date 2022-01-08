@@ -29,7 +29,7 @@ public class CategoryActivity extends AppCompatActivity {
     private RecyclerView cat_recycler_view;
     private Button addCatButton;
     public static List<CategoryModel> catList = new ArrayList<>();
-    public static int selectedCatId = 0;
+    public static int selected_cat_index = 0;
 
     private FirebaseFirestore firestore;
     private Dialog loadingDialog, addCategoryDialog;

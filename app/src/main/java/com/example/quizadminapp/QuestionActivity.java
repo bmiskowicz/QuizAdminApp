@@ -1,7 +1,7 @@
 package com.example.quizadminapp;
 
 import static com.example.quizadminapp.CategoryActivity.catList;
-import static com.example.quizadminapp.CategoryActivity.selectedCatId;
+import static com.example.quizadminapp.CategoryActivity.selected_cat_index;
 import static com.example.quizadminapp.SetsActivity.selected_set_index;
 import static com.example.quizadminapp.SetsActivity.setIDs;
 
@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -79,7 +78,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         loadingDialog.show();
 
-        firestore.collection("Quiz").document(catList.get(selectedCatId).getId())
+        firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
                 .collection(setIDs.get(selected_set_index)).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
