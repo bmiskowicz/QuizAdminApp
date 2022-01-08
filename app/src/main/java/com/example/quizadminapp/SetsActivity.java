@@ -5,6 +5,7 @@ import static com.example.quizadminapp.CategoryActivity.selectedCatId;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.collection.ArrayMap;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,10 @@ public class SetsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sets);
+
+        Toolbar toolbar = findViewById(R.id.sa_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Sets");
 
         setsView = findViewById(R.id.sets_recycler);
         addSetB = findViewById(R.id.addSetB);
@@ -121,7 +126,7 @@ public class SetsActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         Map<String, Object> categoryDocument = new ArrayMap<>();
                         categoryDocument.put("COUNTER", String.valueOf(Integer.valueOf(currentCounter)+1) );
-                        categoryDocument.put("SET" + String.valueOf(setIDs.size() + 1) + "_ID", Integer.valueOf(currentCounter));
+                        categoryDocument.put("SET" + String.valueOf(setIDs.size() + 1) + "_ID", currentCounter);
                         categoryDocument.put("SETS", setIDs.size() +1);
 
                         firestore.collection("Quiz").document(currentCatID)

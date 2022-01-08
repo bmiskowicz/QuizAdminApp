@@ -1,5 +1,8 @@
 package com.example.quizadminapp;
 
+import static com.example.quizadminapp.CategoryActivity.catList;
+import static com.example.quizadminapp.CategoryActivity.selectedCatId;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,10 +21,16 @@ import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,7 +140,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             });
         }
 
-        private void deleteCategory(final int id, Context context, CategoryAdapter adapter){
+        private void deleteCategory(int id, Context context, CategoryAdapter adapter){
             loadingDialog.show();
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -178,7 +187,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                             loadingDialog.dismiss();
                         }
                     });
-
         }
 
         private void updateCategory(String catNewName, int pos, Context context, CategoryAdapter adapter) {
