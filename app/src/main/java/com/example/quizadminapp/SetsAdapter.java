@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,15 @@ public class SetsAdapter extends RecyclerView.Adapter<SetsAdapter.ViewHolder> {
         }
         private void setData(int pos, String setID, SetsAdapter adapter){
             setName.setText("SET " + String.valueOf(pos + 1));
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), QuestionActivity.class);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+
             delSetB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

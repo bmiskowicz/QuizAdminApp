@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0D6D6"
-    tools:context=".CategoryActivity">
+    tools:context=".QuestionActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/question_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -21,27 +21,27 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cat_recycler"
+        android:id="@+id/question_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/addCatB"
+        app:layout_constraintBottom_toTopOf="@+id/addQuestionB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/question_toolbar"
         app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/addCatB"
+        android:id="@+id/addQuestionB"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:background="@color/colorPrimary"
         android:padding="16dp"
-        android:text="Add new category"
+        android:text="Add new question"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:backgroundTint="@null"
