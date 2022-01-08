@@ -141,8 +141,8 @@ public class CategoryActivity extends AppCompatActivity {
         loadingDialog.show();
 
         Map<String, Object> categoryData = new ArrayMap<>();
-        categoryData.put("Name", title);
-        categoryData.put("Sets", 0);
+        categoryData.put("NAME", title);
+        categoryData.put("SETS", 0);
 
         String doc_id =  firestore.collection("Quiz").document().getId();
         firestore.collection("Quiz").document(doc_id)
@@ -161,7 +161,7 @@ public class CategoryActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-                                        Toast.makeText(CategoryActivity.this, "Category added successfully", Toast.LENGTH_SHORT);
+                                        Toast.makeText(CategoryActivity.this, "Category added successfully", Toast.LENGTH_SHORT).show();
 
                                         catList.add(new CategoryModel(doc_id, title, "0"));
 
@@ -174,7 +174,7 @@ public class CategoryActivity extends AppCompatActivity {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(CategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                                        Toast.makeText(CategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                         loadingDialog.dismiss();
                                     }
                                 });
@@ -183,7 +183,7 @@ public class CategoryActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                        Toast.makeText(CategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         loadingDialog.dismiss();
                     }
                 });
