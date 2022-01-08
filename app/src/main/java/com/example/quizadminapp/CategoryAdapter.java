@@ -151,9 +151,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             Map<String, Object> categoryDocument = new ArrayMap<>();
 
             int index = 1;
-            String deleteId;
+            String deleteId = "";
 
-            for (int i=0; i<catList.size(); i++)
+            for (int i = 0; i<catList.size(); i++)
             {
                 if(i!=id)
                 {
@@ -164,43 +164,55 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 else
                 {
                     deleteId = catList.get(i).getId();
-                    String finalDeleteId = deleteId;
-                    firestore.collection("Quiz").document(deleteId)
-                            .collection(String.valueOf(id)).get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    WriteBatch batch = firestore.batch();
-                                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                                        batch.delete(doc.getReference());
-                                    }
-
-                                    batch.commit();
-                                    firestore.collection("Quiz").document(finalDeleteId)
-                                            .delete();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    loadingDialog.dismiss();
-                                }
-                            });
                 }
             }
 
 
             categoryDocument.put("COUNT", index-1);
-            firestore.collection("Quiz").document("Categories")
-                    .set(categoryDocument)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+            String finalDeleteId1 = deleteId;
+            firestore.collection("Quiz").document(deleteId)
+                    .collection(String.valueOf(deleteId)).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show();
-                            CategoryActivity.catList.remove(id);
-                            adapter.notifyDataSetChanged();
-                            loadingDialog.dismiss();
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            WriteBatch batch = firestore.batch();
+                            for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                                batch.delete(doc.getReference());
+                            }
+                            batch.commit();
+                            firestore.collection("Quiz").document(finalDeleteId1)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            firestore.collection("Quiz").document("Categories")
+                                                    .set(categoryDocument)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Toast.makeText(context, "Category deleted successfully", Toast.LENGTH_SHORT).show();
+                                                            CategoryActivity.catList.remove(id);
+                                                            adapter.notifyDataSetChanged();
+                                                            loadingDialog.dismiss();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            loadingDialog.dismiss();
+                                                        }
+                                                    });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            loadingDialog.dismiss();
+                                        }
+                                    });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
