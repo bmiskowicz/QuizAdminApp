@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class QuestionActivity extends AppCompatActivity {
 
     private RecyclerView questionsView;
-    private Button questionButton;
+    private Button addQuestionButton;
     public static List<QuestionModel> questionsList = new ArrayList<>();
     private QuestionAdapter adapter;
     private FirebaseFirestore firestore;
@@ -48,7 +49,7 @@ public class QuestionActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Questions");
 
         questionsView = findViewById(R.id.question_recycler);
-        questionButton = findViewById(R.id.addQuestionB);
+        addQuestionButton = findViewById(R.id.addQuestionB);
 
         loadingDialog = new Dialog(QuestionActivity.this);
         loadingDialog.setContentView(R.layout.loading_progressbar);
@@ -56,10 +57,11 @@ public class QuestionActivity extends AppCompatActivity {
         loadingDialog.getWindow().setBackgroundDrawableResource(R.drawable.progress_background);
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        questionButton.setOnClickListener(new View.OnClickListener() {
+        addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(QuestionActivity.this, QuestionDetailsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -121,5 +123,13 @@ public class QuestionActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
     }
 }
