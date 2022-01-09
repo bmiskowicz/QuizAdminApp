@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,6 +47,8 @@ public class SetsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.sa_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Sets");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setsView = findViewById(R.id.sets_recycler);
         addSetB = findViewById(R.id.addSetB);
@@ -160,5 +163,15 @@ public class SetsActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

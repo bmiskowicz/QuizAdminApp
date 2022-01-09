@@ -13,6 +13,7 @@ import androidx.collection.ArrayMap;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,6 +44,8 @@ public class QuestionDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.qdetails_toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         question = findViewById(R.id.question);
         optionA = findViewById(R.id.optionA);
         optionB = findViewById(R.id.optionB);
@@ -63,7 +66,7 @@ public class QuestionDetailsActivity extends AppCompatActivity {
         if(action.compareTo("EDIT") == 0){
             questionID = getIntent().getIntExtra("Q_ID", 0);
             loadData(questionID);
-            getSupportActionBar().setTitle("Question " + String.valueOf(questionID));
+            getSupportActionBar().setTitle("Question " + String.valueOf(questionID + 1));
             addQuestionButton.setText("EDIT");
         }
         else{
@@ -219,4 +222,17 @@ public class QuestionDetailsActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
