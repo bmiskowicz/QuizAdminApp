@@ -32,6 +32,8 @@ public class QuestionDetailsActivity extends AppCompatActivity {
     private String questionString, aString, bString, cString, dString, answerString;
     private Dialog loadingDialog;
     private FirebaseFirestore firestore;
+    private String action;
+    private int questionID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,6 @@ public class QuestionDetailsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.qdetails_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Question " + String.valueOf(questionsList.size() + 1));
 
         question = findViewById(R.id.question);
         optionA = findViewById(R.id.optionA);
@@ -57,6 +58,18 @@ public class QuestionDetailsActivity extends AppCompatActivity {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         firestore = FirebaseFirestore.getInstance();
+
+        action = getIntent().getStringExtra("ACTION");
+        if(action.compareTo("EDIT") == 0){
+            questionID = getIntent().getIntExtra("Q_ID", 0);
+            loadData(questionID);
+            getSupportActionBar().setTitle("Question " + String.valueOf(questionID));
+            addQuestionButton.setText("EDIT");
+        }
+        else{
+            getSupportActionBar().setTitle("Question " + String.valueOf(questionsList.size() + 1));
+            addQuestionButton.setText("ADD");
+        }
 
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +106,13 @@ public class QuestionDetailsActivity extends AppCompatActivity {
                     return;
                 }
 
-                addNewQuestion();
+                if(action.compareTo("EDIT") == 0){
+                    editQuestion();
+                }
+                else{
+                    addNewQuestion();
+                }
+
             }
         });
 
@@ -140,6 +159,7 @@ public class QuestionDetailsActivity extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Toast.makeText(QuestionDetailsActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                                        loadingDialog.dismiss();
                                     }
                                 });
                     }
@@ -148,6 +168,54 @@ public class QuestionDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(QuestionDetailsActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                        loadingDialog.dismiss();
+                    }
+                });
+    }
+
+    private void loadData(int ID){
+        question.setText(questionsList.get(ID).getQuestion());
+        optionA.setText(questionsList.get(ID).getOptionA());
+        optionB.setText(questionsList.get(ID).getOptionB());
+        optionC.setText(questionsList.get(ID).getOptionC());
+        optionD.setText(questionsList.get(ID).getOptionD());
+        answer.setText(String.valueOf(questionsList.get(ID).getCorrectAnswer()));
+    }
+
+    private void editQuestion(){
+        loadingDialog.show();
+        Map<String, Object> questionData = new ArrayMap<>();
+        questionData.put("QUESTION", questionString);
+        questionData.put("A", aString);
+        questionData.put("B", bString);
+        questionData.put("C", cString);
+        questionData.put("D", dString);
+        questionData.put("ANSWER", answerString);
+
+        firestore.collection("Quiz").document(catList.get(selected_cat_index).getId())
+                .collection(setIDs.get(selected_set_index)).document(questionsList.get(questionID).getQuestionID())
+                .set(questionData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(QuestionDetailsActivity.this, "Question updated successfully", Toast.LENGTH_SHORT);
+
+                        questionsList.get(questionID).setQuestion(questionString);
+                        questionsList.get(questionID).setOptionA(aString);
+                        questionsList.get(questionID).setOptionB(bString);
+                        questionsList.get(questionID).setOptionC(cString);
+                        questionsList.get(questionID).setOptionD(dString);
+                        questionsList.get(questionID).setCorrectAnswer(Integer.valueOf(answerString));
+
+                        loadingDialog.dismiss();
+                        QuestionDetailsActivity.this.finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(QuestionDetailsActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+                        loadingDialog.dismiss();
                     }
                 });
     }
